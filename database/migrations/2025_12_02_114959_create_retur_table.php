@@ -12,9 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('retur', function (Blueprint $table) {
-            $table->id();
-            $table->date('tanggal_retur');
-            $table->integer('jumlah_retur');
+            $table->id(column: 'id_retur');
+            $table->foreignId('id_admin')->constrained()->onDelete('cascade');
+            $table->string(column: 'jumlah_retur');
+            $table->string(column: 'tanggal_retur');
+            $table->string(column: 'alasan_retur');
             $table->timestamps();
         });
     }
