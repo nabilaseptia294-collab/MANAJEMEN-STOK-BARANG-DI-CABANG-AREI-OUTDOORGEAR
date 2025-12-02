@@ -16,6 +16,6 @@ class Produk extends Model
         'id_retur',
         'id_produk',
         'status',
-        'alasan'
+        'alasan_retur'
     ];
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('id_retur')->constrained()->onDelete('cascade');
             $table->string(column: 'id_produk');
             $table->string(column: 'status');
-            $table->string(column: 'alasan');
+            $table->string(column: 'alasan_retur');
             $table->timestamps();
         });
     }
