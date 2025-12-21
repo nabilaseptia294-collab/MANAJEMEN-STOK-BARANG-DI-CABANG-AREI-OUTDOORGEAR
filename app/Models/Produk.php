@@ -9,19 +9,14 @@ class Produk extends Model
 {
     use HasFactory;
 
-    protected $table = 'produk';
+    protected $table = 'produks';
     protected $primaryKey = 'id_produk';
 
     protected $fillable = [
+        'id_admin',
         'nama_produk',
         'kategori',
         'satuan',
-        'harga'
+        'harga',
     ];
-
-    public function admin()
-    {
-        return $this->belongsTo(admin::class, 'id_admin');
-    }
- 
 }

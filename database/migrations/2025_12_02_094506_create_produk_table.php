@@ -6,13 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        if (!Schema::hasTable('products'))
-        Schema::create('products', function (Blueprint $table) {
+        if (!Schema::hasTable('produk'))
+        Schema::create('produks', function (Blueprint $table) {
             $table->id(column: 'id_produk');
             $table->foreignId('id_admin')->constrained()->onDelete('cascade');
             $table->string(column: 'nama_produk');
@@ -22,10 +19,7 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
+    
     public function down(): void
     {
         Schema::dropIfExists('produk');
