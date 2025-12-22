@@ -49,11 +49,10 @@ class PermintaanStokController extends Controller
                 'alasan' => $request->alasan
             ]);
 
-            // Pastikan produk dan qty adalah array dan memiliki jumlah sama
             if (is_array($request->produk) && is_array($request->qty)) {
                 foreach ($request->produk as $i => $produkId) {
                     DetailPermintaan::create([
-                    'id_permintaan_stok' => $permintaan->id, // jangan pakai id_permintaan_stok
+                    'id_permintaan_stok' => $permintaan->id, 
                     'id_produk' => $produkId,
                     'qty' => $request->qty[$i] ?? 1
                 ]);
@@ -67,8 +66,7 @@ class PermintaanStokController extends Controller
 
     public function show(PermintaanStok $permintaan)
     {
-    // $permintaan otomatis diisi oleh Laravel
-    // berdasarkan {permintaan} di route
+
         $permintaan->load('admin', 'details.produk');
         return view('permintaan.show', compact('permintaan'));
     }

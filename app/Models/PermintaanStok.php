@@ -9,8 +9,7 @@ class PermintaanStok extends Model
 {
     use HasFactory;
 
-    protected $table = 'permintaan_stok'; // <-- sesuaikan dengan nama tabel di DB
-
+    protected $table = 'permintaan_stok'; 
     protected $fillable = ['id_admin','cabang','tanggal_permintaan','status','alasan'];
 
     public function details()

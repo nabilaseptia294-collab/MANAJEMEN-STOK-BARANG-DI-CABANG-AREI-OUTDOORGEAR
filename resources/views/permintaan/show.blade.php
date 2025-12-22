@@ -61,7 +61,7 @@
                 @forelse($permintaan->details as $i => $d)
                 <tr>
                     <td>{{ $i + 1 }}</td>
-                    <td>{{ $d->produk->nama_produk ?? '-' }}</td>
+                    <td>{{ $d->produk->nama_produk ??'Produk tidak ditemukan'}}</td>
                     <td>{{ $d->qty }}</td>
                 </tr>
                 @empty
@@ -82,7 +82,7 @@
     </a>
 
     @if($permintaan->status === 'pending')
-    <a href="{{ route('permintaan.edit', $permintaan) }}" class="btn btn-warning">           class="btn btn-warning">
+    <a href="{{ route('permintaan.edit', $permintaan) }}" class="btn btn-warning">        
             Edit Permintaan
         </a>
     @endif
