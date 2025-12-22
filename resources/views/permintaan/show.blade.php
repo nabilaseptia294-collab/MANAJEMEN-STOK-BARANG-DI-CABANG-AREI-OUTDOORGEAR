@@ -9,7 +9,7 @@
         <table class="table table-borderless">
             <tr>
                 <th width="200">ID Permintaan</th>
-                <td>PMT-{{ $permintaan->id_permintaan_stok }}</td>
+                <td>PMT-{{ $permintaan->id}}</td>
             </tr>
             <tr>
                 <th>Cabang</th>
@@ -82,8 +82,7 @@
     </a>
 
     @if($permintaan->status === 'pending')
-        <a href="{{ route('permintaan.edit', $permintaan->id_permintaan_stok) }}"
-           class="btn btn-warning">
+    <a href="{{ route('permintaan.edit', $permintaan) }}" class="btn btn-warning">           class="btn btn-warning">
             Edit Permintaan
         </a>
     @endif

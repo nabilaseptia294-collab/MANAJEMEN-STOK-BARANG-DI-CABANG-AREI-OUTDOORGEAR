@@ -41,31 +41,29 @@
                         @endif
                     </td>
                     <td>
-                        <!-- DETAIL -->
-                        <a href="{{ route('permintaan.show', $p->id_permintaan_stok) }}"
-                           class="btn btn-sm btn-outline-primary mb-1">
-                            Detail
-                        </a>
+<!-- DETAIL -->
+<a href="{{ route('permintaan.show', $p->id) }}"class="btn btn-sm btn-outline-primary mb-1">
+    Detail
+</a>
 
-                        @if($p->status === 'pending')
-                            <!-- EDIT -->
-                            <a href="{{ route('permintaan.edit', $p->id_permintaan_stok) }}"
-                               class="btn btn-sm btn-outline-warning mb-1">
-                                Edit
-                            </a>
+@if($p->status === 'pending')
+    <!-- EDIT -->
+    <a href="{{ route('permintaan.edit', $p->id) }}" 
+   class="btn btn-warning">
+    Edit Permintaan
+</a>
 
-                            <!-- HAPUS -->
-                            <form action="{{ route('permintaan.destroy', $p->id_permintaan_stok) }}"
-                                  method="POST"
-                                  class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger mb-1"
-                                        onclick="return confirm('Yakin hapus permintaan ini?')">
-                                    Hapus
-                                </button>
-                            </form>
-                        @endif
+    <!-- HAPUS -->
+    <form action="{{ route('permintaan.destroy', $p->id) }}" method="POST" class="d-inline">
+    @csrf
+    @method('DELETE')
+    <button class="btn btn-sm btn-outline-danger mb-1"
+            onclick="return confirm('Yakin hapus permintaan ini?')">
+        Hapus
+    </button>
+</form>
+@endif
+
                     </td>
                 </tr>
                 @empty

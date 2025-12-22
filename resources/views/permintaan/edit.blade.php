@@ -2,12 +2,12 @@
 
 @section('content')
 
-<h2 class="mb-4">Form Pengajuan Stok</h2>
+<h2 class="mb-4">Edit Permintaan Stok</h2>
 
-<form method="POST" action="{{ route('permintaan.store') }}">
+<form method="POST" action="{{ route('permintaan.update', $permintaan) }}">
     @csrf
+    @method('PUT')
 
-    {{-- Informasi permintaan --}}
     <div class="card mb-4">
         <div class="card-body">
 
@@ -16,26 +16,26 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">No. Permintaan</label>
-                    <input type="text" class="form-control" placeholder="Diisi Otomatis" disabled>
+                    <input type="text" class="form-control" value="PMT-{{ $permintaan->id }}" disabled>
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Tanggal Permintaan</label>
-                    <input type="date" name="tanggal_permintaan" value="{{ date('Y-m-d') }}" class="form-control" required>
+                    <input type="date" name="tanggal_permintaan" value="{{ $permintaan->tanggal_permintaan }}" class="form-control" required>
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Nama Admin Pengaju</label>
-                    <input type="text" class="form-control" value="{{ auth()->user()->name ?? 'Admin' }}" disabled>
+                    <input type="text" class="form-control" value="{{ $permintaan->admin->name ?? 'Admin' }}" disabled>
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Nama Cabang</label>
                     <select name="cabang" class="form-select" required>
                         @foreach($daftar_cabang as $c)
-                            <option value="{{ $c }}">{{ $c }}</option>
+                            <option value="{{ $c }}" {{ $permintaan->cabang == $c ? 'selected' : '' }}>{{ $c }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -43,17 +43,16 @@
 
             <div>
                 <label class="form-label">Alasan Permintaan (Opsional)</label>
-                <textarea name="alasan" class="form-control" rows="2"></textarea>
+                <textarea name="alasan" class="form-control" rows="2">{{ $permintaan->alasan }}</textarea>
             </div>
 
         </div>
     </div>
 
-    {{-- INPUT PRODUK --}}
     <div class="card mb-4">
         <div class="card-body">
 
-            <h5 class="border-bottom pb-2 mb-3">Input Produk Diminta</h5>
+            <h5 class="border-bottom pb-2 mb-3">Produk Diminta</h5>
 
             <div class="row align-items-end g-2 mb-3">
                 <div class="col-md-6">
@@ -88,14 +87,27 @@
                         <th width="80">Aksi</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    @foreach($permintaan->details as $detail)
+                    <tr>
+                        <td>{{ $detail->produk->nama_produk }}</td>
+                        <td>{{ $detail->produk->sku }}</td>
+                        <td>{{ $detail->qty }}</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('tr').remove()">Hapus</button>
+                        </td>
+                        <input type="hidden" name="produk[]" value="{{ $detail->id_produk }}">
+                        <input type="hidden" name="qty[]" value="{{ $detail->qty }}">
+                    </tr>
+                    @endforeach
+                </tbody>
             </table>
 
         </div>
     </div>
 
     <button type="submit" class="btn btn-danger w-100">
-        <i class="fa fa-paper-plane"></i> Ajukan Permintaan
+        <i class="fa fa-save"></i> Update Permintaan
     </button>
 </form>
 
@@ -103,14 +115,11 @@
 function addProduct() {
     const select = document.getElementById('input-produk-id');
     const selected = select.options[select.selectedIndex];
-
     const produkId = select.value;
     const nama = selected.getAttribute('data-nama');
     const sku = selected.getAttribute('data-sku');
     const qty = document.getElementById('input-qty').value;
-
     if (!qty || qty < 1) { alert('Jumlah minimal 1'); return; }
-
     const tbody = document.querySelector('#detail-table tbody');
     const row = document.createElement('tr');
     row.innerHTML = `
