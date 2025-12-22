@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\PermintaanStokController;
+use App\Http\Controllers\ReturController;
+
 // Route login
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
@@ -28,6 +30,9 @@ Route::resource('produk', ProdukController::class)->middleware('auth');
 
 // Resource route untuk permintaan stok (pakai auth)
 Route::resource('permintaan-stok', PermintaanStokController::class)->middleware('auth');
+
+// Resource route untuk retur (pakai auth)
+Route::resource('retur', ReturController::class)->middleware('auth');
 
 // Optional: route manual untuk permintaan stok (pakai auth)
 Route::prefix('permintaan')->middleware('auth')->group(function () {
