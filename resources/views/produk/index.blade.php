@@ -1,92 +1,123 @@
 @extends('layouts.app')
 
 @section('content')
-<div style="background:#f5f5f5; min-height:100vh; padding:24px">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    {{-- HEADER --}}
-    <div style="margin-bottom:20px">
-        <h1 style="font-size:22px; font-weight:bold;">AREI Outdoor Gear</h1>
-        <h2 style="font-size:20px; font-weight:bold;">Manajemen Produk</h2>
-        <p style="color:#666;">Kelola data produk AREI</p>
+<div class="p-6 bg-gray-100 min-h-screen font-sans text-sm text-gray-700">
+    
+    <div class="flex items-center gap-2 mb-6">
+        <i class="fas fa-box text-black text-lg"></i>
+        <h1 class="text-xl font-bold text-gray-900">Manajemen Produk</h1>
     </div>
 
-    {{-- ACTION BAR --}}
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
-        <a href="{{ route('produk.create') }}"
-           style="
-            background:#c62828;
-            color:white;
-            padding:10px 16px;
-            border-radius:6px;
-            font-weight:bold;
-           ">
-            + Tambah Produk
-        </a>
-
-        <input
-            type="text"
-            placeholder="Cari nama produk..."
-            style="
-                padding:8px 12px;
-                width:220px;
-                border-radius:6px;
-                border:1px solid #ccc;
-            ">
+    <div class="flex flex-col md:flex-row gap-4 mb-6 justify-between items-center">
+        <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+            <a href="{{ route('produk.create') }}" class="bg-[#E00025] hover:bg-red-700 text-white px-4 py-2 rounded shadow flex items-center gap-2 font-medium transition-colors">
+                <i class="fas fa-plus"></i> Tambah Produk
+            </a>
+            
+            <form action="{{ route('produk.index') }}" method="GET" class="relative w-full md:w-96">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari kode atau nama produk..." class="w-full pl-4 pr-10 py-2 rounded shadow-sm border border-transparent focus:outline-none focus:ring-2 focus:ring-[#E00025] bg-white">
+                <button type="submit" class="absolute right-0 top-0 h-full w-10 text-gray-500 rounded-r hover:bg-gray-100 flex items-center justify-center">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+        
+        <form action="{{ route('produk.index') }}" method="GET">
+            <div class="relative">
+                <select name="status" onchange="this.form.submit()" class="appearance-none bg-[#E00025] hover:bg-red-700 text-white pl-4 pr-8 py-2 rounded shadow font-medium cursor-pointer focus:outline-none">
+                    <option value="" class="bg-white text-gray-800" {{ request('status') == '' ? 'selected' : '' }}>Semua Status</option>
+                    <option value="aktif" class="bg-white text-gray-800" {{ request('status') == 'aktif' ? 'selected' : '' }}>Status Aktif</option>
+                    <option value="tidak_aktif" class="bg-white text-gray-800" {{ request('status') == 'tidak_aktif' ? 'selected' : '' }}>Status Tidak Aktif</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-white">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </div>
+            </div>
+        </form>
     </div>
 
-    {{-- TABLE CARD --}}
-    <div style="background:white; border-radius:8px; padding:16px">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-[#E00025] text-white font-bold text-sm uppercase tracking-wide">
+                    <tr>
+                        <th class="px-6 py-4">Nama Barang</th>
+                        <th class="px-6 py-4">SKU</th>
+                        <th class="px-6 py-4">Satuan</th>
+                        <th class="px-6 py-4">Kategori</th>
+                        <th class="px-6 py-4">Harga</th> <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4 text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-gray-700">
+                    
+                    @forelse ($produks as $produk)
+                    <tr class="hover:bg-red-50 transition-colors bg-white">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-4">
+                                @if($produk->gambar)
+                                    <img src="{{ asset('storage/'.$produk->gambar) }}" class="w-10 h-10 object-cover rounded border border-gray-200">
+                                @else
+                                    <div class="w-10 h-10 bg-gray-100 rounded border border-gray-200 flex items-center justify-center shrink-0 text-gray-400">
+                                        <i class="fas fa-image text-lg"></i>
+                                    </div>
+                                @endif
+                                <span class="font-semibold text-gray-900">{{ $produk->nama_produk }}</span>
+                            </div>
+                        </td>
+                        
+                        <td class="px-6 py-4 font-medium">{{ $produk->sku ?? '-' }}</td>
+                        <td class="px-6 py-4">{{ $produk->satuan }}</td>
+                        <td class="px-6 py-4 capitalize">{{ $produk->kategori }}</td>
+                        
+                        <td class="px-6 py-4 font-medium text-gray-900">
+                            Rp {{ number_format($produk->harga, 0, ',', '.') }}
+                        </td>
+                        
+                        <td class="px-6 py-4">
+                            @if(strtolower($produk->status) == 'aktif')
+                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 shadow-sm inline-block min-w-[80px] text-center">
+                                    Aktif
+                                </span>
+                            @else
+                                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200 shadow-sm inline-block min-w-[80px] text-center">
+                                    Tidak Aktif
+                                </span>
+                            @endif
+                        </td>
 
-        <table width="100%" cellpadding="10" cellspacing="0">
-            <thead style="background:#f0f0f0">
-                <tr>
-                    <th align="left">Nama Produk</th>
-                    <th>Kategori</th>
-                    <th>Satuan</th>
-                    <th>Harga</th>
-                    <th>Admin</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex justify-center gap-3 text-lg">
+                                <a href="{{ route('produk.edit', $produk->id_produk) }}" class="text-gray-500 hover:text-blue-600 transition-colors">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                                <form action="{{ route('produk.destroy', $produk->id_produk) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" onclick="return confirm('Hapus produk ini?')" class="text-gray-500 hover:text-[#E00025] transition-colors">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7" class="px-6 py-8 text-center text-gray-500 bg-gray-50">
+                            <div class="flex flex-col items-center justify-center">
+                                <i class="fas fa-box-open text-4xl mb-3 text-gray-300"></i>
+                                <p>Belum ada data produk.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
 
-            <tbody>
-                @foreach($produks as $produk)
-                <tr style="border-bottom:1px solid #eee">
-                    <td>{{ $produk->nama_produk }}</td>
-                    <td align="center">{{ $produk->kategori }}</td>
-                    <td align="center">{{ $produk->satuan }}</td>
-                    <td align="center">
-                        Rp {{ number_format($produk->harga,0,',','.') }}
-                    </td>
-                    <td align="center">-</td>
-                    <td align="center">
-                        <a href="{{ route('produk.edit', $produk->id_produk) }}"
-                           style="color:#1976d2; margin-right:8px">
-                            Edit
-                        </a>
-
-                        <form action="{{ route('produk.destroy', $produk->id_produk) }}"
-                              method="POST" style="display:inline">
-                            @csrf
-                            @method('DELETE')
-                            <button
-                                onclick="return confirm('Hapus produk?')"
-                                style="
-                                    background:none;
-                                    border:none;
-                                    color:#c62828;
-                                    cursor:pointer;
-                                ">
-                                Hapus
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-
+                </tbody>
+            </table>
+        </div>
     </div>
-
 </div>
 @endsection

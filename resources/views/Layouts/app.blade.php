@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<!-- Navbar / Header -->
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-danger px-4">
     <span class="navbar-brand">AREI OUTDOOR GEAR</span>
 </nav>
@@ -25,7 +25,7 @@
         <div class="sidebar-profile mb-3 p-3">
             <div class="avatar mb-2"></div>
             <div class="profile-info">
-                <strong>{{ auth()->user()->name ?? 'Admin' }}</strong>
+                <strong>{{ auth()->user()->name ?? 'Admin AREI' }}</strong>
                 <small>{{ auth()->user()->email ?? '-' }}</small>
             </div>
         </div>
@@ -33,23 +33,43 @@
         <input type="text" class="form-control mb-3" placeholder="Cari">
 
         <ul class="menu list-unstyled">
+
+            <!-- DASHBOARD -->
             <li class="{{ request()->is('dashboard') ? 'active' : '' }}">
-                <a href="{{ route('dashboard') }}"><i class="fa-solid fa-table-columns"></i> Dasbor</a>
+                <a href="{{ route('dashboard') }}">
+                    <i class="fa-solid fa-table-columns"></i> Dasbor
+                </a>
             </li>
-            <li class="{{ request()->is('permintaan*') ? 'active' : '' }}">
-                <a href="{{ route('permintaan.index') }}"><i class="fa-solid fa-box"></i> Permintaan Stok</a>
+
+            <!-- PERMINTAAN STOK (FIX DI SINI) -->
+            <li class="{{ request()->is('permintaan-stok*') ? 'active' : '' }}">
+                <a href="{{ route('permintaan-stok.index') }}">
+                    <i class="fa-solid fa-box"></i> Permintaan Stok
+                </a>
             </li>
+
+            <!-- PRODUK (FIX LINK) -->
             <li class="{{ request()->is('produk*') ? 'active' : '' }}">
-                <a href="#"><i class="fa-solid fa-boxes-stacked"></i> Manajemen Produk</a>
+                <a href="{{ route('produk.index') }}">
+                    <i class="fa-solid fa-boxes-stacked"></i> Manajemen Produk
+                </a>
             </li>
-            <li><a href="#"><i class="fa-solid fa-arrow-rotate-left"></i> Retur</a></li>
+
+            <!-- RETUR (DUMMY) -->
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-arrow-rotate-left"></i> Retur
+                </a>
+            </li>
+
         </ul>
     </aside>
 
-    <!-- Konten Halaman -->
+    <!-- Konten -->
     <main class="content p-4 w-100">
         @yield('content')
     </main>
+
 </div>
 
 </body>
