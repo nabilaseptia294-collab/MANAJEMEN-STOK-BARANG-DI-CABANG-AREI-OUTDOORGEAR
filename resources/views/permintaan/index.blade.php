@@ -21,7 +21,7 @@
                     <th>Admin Pengaju</th>
                     <th>Tanggal</th>
                     <th>Status</th>
-                    <th width="120">Aksi</th>
+                    <th width="220">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,17 +32,40 @@
                     <td>{{ $p->admin->name ?? 'Admin Tidak Dikenal' }}</td>
                     <td>{{ \Carbon\Carbon::parse($p->tanggal_permintaan)->format('d/m/Y') }}</td>
                     <td>
-                        @if($p->status == 'pending')
+                        @if($p->status === 'pending')
                             <span class="badge bg-warning text-dark">Pending</span>
+                        @elseif($p->status === 'disetujui')
+                            <span class="badge bg-success">Disetujui</span>
                         @else
-                            <span class="badge bg-success">Approved</span>
+                            <span class="badge bg-danger">Ditolak</span>
                         @endif
                     </td>
                     <td>
+                        <!-- DETAIL -->
                         <a href="{{ route('permintaan.show', $p->id_permintaan_stok) }}"
-                           class="btn btn-sm btn-outline-primary">
+                           class="btn btn-sm btn-outline-primary mb-1">
                             Detail
                         </a>
+
+                        @if($p->status === 'pending')
+                            <!-- EDIT -->
+                            <a href="{{ route('permintaan.edit', $p->id_permintaan_stok) }}"
+                               class="btn btn-sm btn-outline-warning mb-1">
+                                Edit
+                            </a>
+
+                            <!-- HAPUS -->
+                            <form action="{{ route('permintaan.destroy', $p->id_permintaan_stok) }}"
+                                  method="POST"
+                                  class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-outline-danger mb-1"
+                                        onclick="return confirm('Yakin hapus permintaan ini?')">
+                                    Hapus
+                                </button>
+                            </form>
+                        @endif
                     </td>
                 </tr>
                 @empty
