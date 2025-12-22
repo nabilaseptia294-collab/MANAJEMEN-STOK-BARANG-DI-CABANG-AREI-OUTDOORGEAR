@@ -2,18 +2,26 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Produk extends Model
+class Stok extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
     protected $table = 'stok';
-
     protected $primaryKey = 'id_stok';
 
     protected $fillable = [
-        'jumlah_masuk'
+        'id_produk',
+        'stok_tersedia'
     ];
+
+    public $timestamps = false;
+
+    public function produk()
+    {
+        return $this->belongsTo(Produk::class, 'id_produk');
+    }
 }
 
