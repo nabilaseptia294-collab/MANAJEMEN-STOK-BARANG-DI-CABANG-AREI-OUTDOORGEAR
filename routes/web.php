@@ -79,4 +79,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Stok
-Route::get('/stok', [StokController::class, 'index'])->name('stok.index');
+Route::get('/stok', function () {
+    $stok = Stok::with('produk')->get();
+    return view('stok.index', compact('stok'));
+});
