@@ -168,21 +168,6 @@
                 </a>
             </li>
 
-        </ul>
-
-        <ul class="sidebar-bottom">
-            <li>
-                <a href="{{ route('logout') }}"
-                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    Keluar
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
-            </li>
-        </ul>
-
     </aside>
 
     <!-- CONTENT -->

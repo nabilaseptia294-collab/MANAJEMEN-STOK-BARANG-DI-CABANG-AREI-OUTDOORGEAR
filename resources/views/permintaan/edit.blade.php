@@ -4,10 +4,12 @@
 
 <h2 class="mb-4">Edit Permintaan Stok</h2>
 
+{{-- Formulir edit permintaan stok --}}
 <form method="POST" action="{{ route('permintaan.update', $permintaan) }}">
-    @csrf
-    @method('PUT')
+    @csrf {{-- Token CSRF --}}
+    @method('PUT') {{-- Method PUT untuk update --}}
 
+    {{-- Bagian informasi permintaan --}}
     <div class="card mb-4">
         <div class="card-body">
 
@@ -15,11 +17,13 @@
 
             <div class="row mb-3">
                 <div class="col-md-6">
+                    {{-- Nomor permintaan --}}
                     <label class="form-label">No. Permintaan</label>
                     <input type="text" class="form-control" value="PMT-{{ $permintaan->id }}" disabled>
                 </div>
 
                 <div class="col-md-6">
+                    {{-- Tanggal permintaan --}}
                     <label class="form-label">Tanggal Permintaan</label>
                     <input type="date" name="tanggal_permintaan" value="{{ $permintaan->tanggal_permintaan }}" class="form-control" required>
                 </div>
@@ -27,11 +31,13 @@
 
             <div class="row mb-3">
                 <div class="col-md-6">
+                    {{-- Nama admin --}}
                     <label class="form-label">Nama Admin Pengaju</label>
                     <input type="text" class="form-control" value="{{ $permintaan->admin->name ?? 'Admin' }}" disabled>
                 </div>
 
                 <div class="col-md-6">
+                    {{-- Pilih cabang --}}
                     <label class="form-label">Nama Cabang</label>
                     <select name="cabang" class="form-select" required>
                         @foreach($daftar_cabang as $c)
@@ -41,6 +47,7 @@
                 </div>
             </div>
 
+            {{-- Alasan permintaan --}}
             <div>
                 <label class="form-label">Alasan Permintaan (Opsional)</label>
                 <textarea name="alasan" class="form-control" rows="2">{{ $permintaan->alasan }}</textarea>
@@ -49,11 +56,13 @@
         </div>
     </div>
 
+    {{-- Bagian edit produk --}}
     <div class="card mb-4">
         <div class="card-body">
 
             <h5 class="border-bottom pb-2 mb-3">Produk Diminta</h5>
 
+            {{-- Pilih produk baru --}}
             <div class="row align-items-end g-2 mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Pilih Produk</label>
@@ -67,17 +76,20 @@
                 </div>
 
                 <div class="col-md-2">
+                    {{-- Jumlah produk baru --}}
                     <label class="form-label">Jumlah</label>
                     <input type="number" id="input-qty" min="1" value="1" class="form-control">
                 </div>
 
                 <div class="col-md-4">
+                    {{-- Tombol tambah produk --}}
                     <button type="button" onclick="addProduct()" class="btn btn-success">
                         <i class="fa fa-plus"></i> Tambah Item
                     </button>
                 </div>
             </div>
 
+            {{-- Tabel produk yang sudah ada --}}
             <table class="table table-bordered" id="detail-table">
                 <thead class="table-light">
                     <tr>
@@ -90,12 +102,14 @@
                 <tbody>
                     @foreach($permintaan->details as $detail)
                     <tr>
+                        {{-- Produk lama --}}
                         <td>{{ $detail->produk->nama_produk }}</td>
                         <td>{{ $detail->produk->sku }}</td>
                         <td>{{ $detail->qty }}</td>
                         <td>
                             <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('tr').remove()">Hapus</button>
                         </td>
+                        {{-- Input hidden untuk dikirim --}}
                         <input type="hidden" name="produk[]" value="{{ $detail->id_produk }}">
                         <input type="hidden" name="qty[]" value="{{ $detail->qty }}">
                     </tr>
@@ -106,11 +120,13 @@
         </div>
     </div>
 
+    {{-- Tombol submit update --}}
     <button type="submit" class="btn btn-danger w-100">
         <i class="fa fa-save"></i> Update Permintaan
     </button>
 </form>
 
+{{-- Script tambah produk baru ke tabel --}}
 <script>
 function addProduct() {
     const select = document.getElementById('input-produk-id');

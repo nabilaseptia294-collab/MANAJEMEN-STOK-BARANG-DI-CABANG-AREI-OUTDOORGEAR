@@ -22,11 +22,6 @@ Route::post('/login', [LoginController::class, 'login'])
     ->name('login.submit')
     ->middleware('guest');
 
-// Logout
-Route::post('/logout', [LoginController::class, 'logout'])
-    ->name('logout')
-    ->middleware('auth'); 
-
 // halaman pertama ke login
 Route::get('/', function () {
     return redirect()->route('login');
