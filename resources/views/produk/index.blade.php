@@ -4,7 +4,29 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<div class="p-6 bg-gray-100 min-h-screen font-sans text-sm text-gray-700">
+<style>
+    .layout {
+            display: flex;
+            flex-direction: row;
+        }
+
+    .content {
+            flex: 1;
+            padding: 16px;
+        }
+    .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+        }
+</style>
+
+<x-navbar/>
+<div class="layout">
+    <x-sidebar />
+    <div class="content">
+        <div class="p-6 bg-gray-100 font-sans text-sm text-gray-700">
     
     <div class="flex items-center gap-2 mb-6">
         <i class="fas fa-box text-black text-lg"></i>
@@ -120,4 +142,7 @@
         </div>
     </div>
 </div>
+    </div>
+</div>
+
 @endsection

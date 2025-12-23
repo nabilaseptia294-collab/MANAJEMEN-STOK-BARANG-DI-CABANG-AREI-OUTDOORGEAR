@@ -8,6 +8,10 @@ use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+<<<<<<< HEAD
+=======
+use Illuminate\Support\Facades\Auth;
+>>>>>>> 84189c8 (Update model dan blade penerimaan)
 
 class PenerimaanController extends Controller
 {
@@ -19,6 +23,7 @@ class PenerimaanController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
     public function create()
 {
     return view('penerimaan.tambah', [
@@ -29,6 +34,37 @@ class PenerimaanController extends Controller
     /**
      * Simpan penerimaan sebagai DRAFT
      */
+=======
+    public function detail($id)
+    {
+        $penerimaan = Penerimaan::with(['detail.produk'])
+        ->where('no_surat_jalan', $id)
+        ->firstOrFail();
+        return view('penerimaan.detail', [
+            'penerimaan' => $penerimaan
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $penerimaan = Penerimaan::with(['detail.produk'])
+        ->where('no_surat_jalan', $id)
+        ->firstOrFail();
+        return view('penerimaan.edit', [
+            'penerimaan' => $penerimaan,
+            'produk' => Produk::all()
+        ]);
+    }
+
+    public function create()
+    {
+        return view('penerimaan.tambah', [
+            'produk' => Produk::all()
+        ]);
+    }
+
+    // Simpan penerimaan sebagai DRAFT
+>>>>>>> 84189c8 (Update model dan blade penerimaan)
     public function storeDraft(Request $request)
     {
         $request->validate([
@@ -37,7 +73,11 @@ class PenerimaanController extends Controller
         ]);
 
         $penerimaan = Penerimaan::create([
+<<<<<<< HEAD
             'id_admin' => $request->id_admin,
+=======
+            'id_user' => Auth::id(),
+>>>>>>> 84189c8 (Update model dan blade penerimaan)
             'id_produk' => $request->id_produk,
             'no_penerimaan' => $this->generatePenerimaanNumber(),
             'no_surat_jalan' => $request->no_surat_jalan,
@@ -52,9 +92,13 @@ class PenerimaanController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
     /**
      * Tambah produk ke penerimaan (detail)
      */
+=======
+    // Tambah produk ke penerimaan (detail)
+>>>>>>> 84189c8 (Update model dan blade penerimaan)
     public function addDetail(Request $request, $penerimaanId)
     {
         $request->validate([
@@ -80,9 +124,13 @@ class PenerimaanController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
     /**
      * Hapus produk dari penerimaan
      */
+=======
+    // Hapus produk dari penerimaan
+>>>>>>> 84189c8 (Update model dan blade penerimaan)
     public function deleteDetail($id)
     {
         PenerimaanDetail::findOrFail($id)->delete();
@@ -92,9 +140,75 @@ class PenerimaanController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
     /**
      * Simpan FINAL dan update stok
      */
+=======
+    public function destroy($id)
+{
+    try {
+        $penerimaan = Penerimaan::findOrFail($id);
+        $penerimaan->delete();
+        return response()->json([
+            'message' => 'Draft penerimaan beserta detail berhasil dihapus',
+            'status' => 'success',
+        ]);
+        
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Gagal menghapus data penerimaan',
+            'error' => $e->getMessage(),
+            'status' => 'error'
+        ], 500);
+    }
+}
+
+    public function update(Request $request, $id)
+{
+    $request->validate([
+        'no_surat_jalan' => 'required',
+        'tanggal_penerimaan' => 'required|date',
+    ]);
+
+    $penerimaan = Penerimaan::findOrFail($id);
+
+    $penerimaan->update([
+        'no_surat_jalan' => $request->no_surat_jalan,
+        'tanggal_penerimaan' => $request->tanggal_penerimaan,
+        'catatan' => $request->catatan,
+    ]);
+
+    return response()->json([
+        'message' => 'Penerimaan berhasil diperbarui'
+    ]);
+    
+}
+
+public function updateDetail(Request $request, $id)
+{
+    $request->validate([
+        'jumlah_surat_jalan' => 'required|min:0',
+        'jumlah_diterima' => 'required|integer|min:0',
+        'kondisi' => 'required'
+    ]);
+
+    $detail = PenerimaanDetail::findOrFail($id);
+
+    $detail->update([
+        'jumlah_surat_jalan' => $request->jumlah_surat_jalan,
+        'jumlah_diterima' => $request->jumlah_diterima,
+        'kondisi' => $request->kondisi,
+    ]);
+
+    return response()->json([
+        'message' => 'Detail berhasil diperbarui'
+    ]);
+}
+
+
+    // Simpan FINAL 
+>>>>>>> 84189c8 (Update model dan blade penerimaan)
     public function finalize($id)
     {
         DB::transaction(function () use ($id) {
@@ -115,9 +229,13 @@ class PenerimaanController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
     /**
      * Detail penerimaan
      */
+=======
+    // Detail penerimaan
+>>>>>>> 84189c8 (Update model dan blade penerimaan)
     public function show($id)
     {
         $penerimaan = Penerimaan::with(['detail.produk'])->findOrFail($id);
@@ -127,6 +245,7 @@ class PenerimaanController extends Controller
 
     private function generatePenerimaanNumber()
     {
+<<<<<<< HEAD
     $now = Carbon::now();
     $month = $now->format('m');
     $year = $now->format('y');
@@ -145,4 +264,24 @@ class PenerimaanController extends Controller
 
     return "PNM-{$month}-{$year}-{$nextNumber}";
 }
+=======
+        $now = Carbon::now();
+        $month = $now->format('m');
+        $year = $now->format('y');
+
+        $last = Penerimaan::whereMonth('created_at', $now->month)
+            ->whereYear('created_at', $now->year)
+            ->orderBy('id_penerimaan', 'desc')
+            ->first();
+
+        if ($last) {
+            $lastNumber = intval(substr($last->no_penerimaan, -3));
+            $nextNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
+        } else {
+            $nextNumber = '001';
+        }
+
+        return "PNM-{$month}-{$year}-{$nextNumber}";
+    }
+>>>>>>> 84189c8 (Update model dan blade penerimaan)
 }
