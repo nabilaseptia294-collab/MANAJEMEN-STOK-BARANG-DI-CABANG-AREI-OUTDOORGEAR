@@ -11,13 +11,12 @@ class Stok extends Model
 
     protected $table = 'stok';
     protected $primaryKey = 'id_stok';
+    public $timestamps = false;
 
     protected $fillable = [
         'id_produk',
         'stok_tersedia'
     ];
-
-    public $timestamps = false;
 
     public function produk()
     {
