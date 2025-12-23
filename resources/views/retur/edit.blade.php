@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container p-4">
+<x-navbar />
+<div class="layout">
+    <x-sidebar />
+    <div class="content">
+        <div class=" p-4">
     <h2 class="mb-3 fw-bold">Edit Retur Barang</h2>
 
     <div class="card p-4">
@@ -42,6 +46,8 @@
                 <a href="{{ route('retur.index') }}" class="btn btn-secondary">Batal</a>
             </div>
         </form>
+    </div>
+</div>
     </div>
 </div>
 @endsection

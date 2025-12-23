@@ -1,7 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container p-4">
+<style>
+    .layout {
+            display: flex;
+            flex-direction: row;
+        }
+
+    .content {
+            flex: 1;
+            padding: 16px;
+        }
+    .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+        }
+</style>
+<x-navbar />
+<div class="layout">
+    <x-sidebar />
+    <div class="content">
+        <div class=" p-4">
     <h2 class="mb-3 fw-bold">Retur Barang</h2>
 
     <div class="d-flex justify-content-between mb-3">
@@ -77,6 +98,8 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+</div>
     </div>
 </div>
 @endsection

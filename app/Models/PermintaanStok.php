@@ -13,7 +13,7 @@ class PermintaanStok extends Model
     protected $table = 'permintaan_stok'; 
 
     // Kolom yang bisa diisi massal
-    protected $fillable = ['id_admin','cabang','tanggal_permintaan','status','alasan'];
+    protected $fillable = ['id_user','cabang','tanggal_permintaan','status','alasan'];
 
     // Relasi ke detail permintaan (one-to-many)
     public function details()

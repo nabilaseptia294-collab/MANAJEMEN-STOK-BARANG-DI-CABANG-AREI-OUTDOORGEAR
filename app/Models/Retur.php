@@ -15,7 +15,7 @@ class Retur extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
-        'id_admin',
+        'id_user',
         'nama_barang',
         'jumlah_retur',
         'satuan',

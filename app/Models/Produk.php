@@ -9,11 +9,7 @@ class Produk extends Model
 {
     use HasFactory;
 
-<<<<<<< HEAD
-    protected $table = 'produks';
-=======
     protected $table = 'products';
->>>>>>> 84189c8 (Update model dan blade penerimaan)
     protected $primaryKey = 'id_produk';
 
     protected $fillable = [

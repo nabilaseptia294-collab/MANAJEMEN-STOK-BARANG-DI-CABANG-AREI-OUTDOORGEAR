@@ -33,7 +33,7 @@ class ReturController extends Controller
         $kode = 'RTR-' . date('Ymd') . '-' . str_pad($next, 3, '0', STR_PAD_LEFT);
 
         Retur::create([
-            'id_admin'      => auth()->id(),
+            'id_user'      => auth()->id(),
             'sku'           => $kode,
             'nama_barang'   => $request->nama_barang,
             'jumlah_retur'  => $request->jumlah_retur,

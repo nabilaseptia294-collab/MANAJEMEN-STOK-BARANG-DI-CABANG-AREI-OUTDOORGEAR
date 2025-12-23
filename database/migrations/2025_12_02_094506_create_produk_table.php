@@ -11,24 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-<<<<<<< HEAD
-        Schema::create('produks', function (Blueprint $table) {
-            // PRIMARY KEY
-            $table->id('id_produk');
-
-            // FOREIGN KEY ke users
-            $table->unsignedBigInteger('id_admin');
-
-            // DATA PRODUK
-            $table->string('nama_produk');
-            $table->string('kategori');
-            $table->string('satuan');
-            $table->string('harga');
-            $table->string('sku')->nullable();
-            $table->string('status')->default('aktif');
-            $table->string('gambar')->nullable();
-
-=======
         if (!Schema::hasTable('products'))
         Schema::create('products', function (Blueprint $table) {
             $table->id(column: 'id_produk');
@@ -41,14 +23,7 @@ return new class extends Migration
             $table->string(column: 'harga');
             $table->string('status')->default('aktif');
             $table->string(column: 'gambar')->nullable();
->>>>>>> 84189c8 (Update model dan blade penerimaan)
             $table->timestamps();
-
-            // RELASI FOREIGN KEY
-            $table->foreign('id_admin')
-                  ->references('id')
-                  ->on('users')
-                  ->onDelete('cascade');
         });
     }
 
@@ -57,10 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-<<<<<<< HEAD
-        Schema::dropIfExists('produks');
-=======
         Schema::dropIfExists('products');
->>>>>>> 84189c8 (Update model dan blade penerimaan)
     }
 };

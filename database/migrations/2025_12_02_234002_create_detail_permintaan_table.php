@@ -17,14 +17,14 @@ return new class extends Migration
 
             // FK ke permintaan_stok (id)
             $table->foreign('id_permintaan')
-                  ->references('id')
+                  ->references('id_permintaan_stok')
                   ->on('permintaan_stok')
                   ->onDelete('cascade');
 
             // FK ke produks (id_produk)
             $table->foreign('id_produk')
                   ->references('id_produk') // ⬅️ INI KUNCINYA
-                  ->on('produks')
+                  ->on('products')
                   ->onDelete('cascade');
         });
     }

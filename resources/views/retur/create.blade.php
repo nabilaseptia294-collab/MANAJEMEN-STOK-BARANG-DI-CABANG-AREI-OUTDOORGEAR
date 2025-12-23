@@ -15,9 +15,28 @@
         border-radius:10px;
         padding:30px;
     }
+    .layout {
+            display: flex;
+            flex-direction: row;
+        }
+
+    .content {
+            flex: 1;
+            padding: 16px;
+        }
+    .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+        }
 </style>
 
-<div class="retur-card">
+<x-navbar />
+<div class="layout">
+    <x-sidebar />
+    <div class="content">
+        <div class="retur-card">
 
     <h3 class="fw-bold mb-4">Tambah Retur</h3>
 
@@ -104,5 +123,9 @@
     </form>
 
 </div>
+    </div>
+</div>
+
+
 
 @endsection
