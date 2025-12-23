@@ -20,13 +20,32 @@ class ReturController extends Controller
 
     public function store(Request $request)
     {
-        Retur::create([
-            'id_admin' => auth()->id(),
-            'jumlah_retur' => $request->jumlah_retur,
-            'tanggal_retur' => $request->tanggal_retur,
-            'alasan_retur' => $request->alasan_retur,
+        $request->validate([
+            'nama_barang'   => 'nullable',
+            'jumlah_retur'  => 'required',
+            'satuan'        => 'nullable',
+            'tanggal_retur' => 'required',
+            'alasan_retur'  => 'required'
         ]);
 
-        return redirect()->route('retur.index');
+        // Ambil ID terakhir berdasarkan id_retur
+        $last = Retur::orderBy('id_retur', 'desc')->first();
+        $next = $last ? $last->id_retur + 1 : 1;
+
+        // Generate kode retur
+        $kode = 'RTR-' . date('Ymd') . '-' . str_pad($next, 3, '0', STR_PAD_LEFT);
+
+        Retur::create([
+            'id_admin'      => auth()->id(),
+            'sku'           => $kode,
+            'nama_barang'   => $request->nama_barang,
+            'jumlah_retur'  => $request->jumlah_retur,
+            'satuan'        => $request->satuan,
+            'tanggal_retur' => $request->tanggal_retur,
+            'alasan_retur'  => $request->alasan_retur,
+        ]);
+
+        return redirect()->route('retur.index')
+            ->with('success', 'Data retur berhasil ditambahkan!');
     }
 }

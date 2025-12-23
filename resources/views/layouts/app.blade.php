@@ -147,6 +147,13 @@
                 </a>
             </li>
 
+            <li class="{{ request()->is('retur*') ? 'active' : '' }}">
+                <a href="{{ route('retur.index') }}">
+                    <i class="fa-solid fa-right-left"></i>
+                    Retur 
+                </a>
+            </li>
+
             <li class="{{ request()->is('permintaan*') ? 'active' : '' }}">
                 <a href="{{ route('permintaan.index') }}">
                     <i class="fa-solid fa-box"></i>

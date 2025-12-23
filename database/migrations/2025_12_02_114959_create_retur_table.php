@@ -6,25 +6,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        if (!Schema::hasTable('retur'))
         Schema::create('retur', function (Blueprint $table) {
-            $table->id(column: 'id_retur');
-            $table->foreignId('id_admin')->constrained()->onDelete('cascade');
-            $table->string(column: 'jumlah_retur');
-            $table->string(column: 'tanggal_retur');
-            $table->string(column: 'alasan_retur');
+            $table->id('id_retur');
+
+            $table->unsignedBigInteger('id_admin');
+
+            $table->integer('jumlah_retur');
+            $table->date('tanggal_retur');
+            $table->text('alasan_retur');
+
             $table->timestamps();
+
+            $table->foreign('id_admin')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('retur');
