@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+<<<<<<< HEAD
         Schema::create('produks', function (Blueprint $table) {
             // PRIMARY KEY
             $table->id('id_produk');
@@ -27,6 +28,20 @@ return new class extends Migration
             $table->string('status')->default('aktif');
             $table->string('gambar')->nullable();
 
+=======
+        if (!Schema::hasTable('products'))
+        Schema::create('products', function (Blueprint $table) {
+            $table->id(column: 'id_produk');
+            $table->foreignId('id_user'); 
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->string('sku')->nullable();
+            $table->string(column: 'nama_produk');
+            $table->string(column: 'kategori');
+            $table->string(column: 'satuan');
+            $table->string(column: 'harga');
+            $table->string('status')->default('aktif');
+            $table->string(column: 'gambar')->nullable();
+>>>>>>> 84189c8 (Update model dan blade penerimaan)
             $table->timestamps();
 
             // RELASI FOREIGN KEY
@@ -42,6 +57,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+<<<<<<< HEAD
         Schema::dropIfExists('produks');
+=======
+        Schema::dropIfExists('products');
+>>>>>>> 84189c8 (Update model dan blade penerimaan)
     }
 };

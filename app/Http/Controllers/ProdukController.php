@@ -5,7 +5,8 @@ namespace App\Models;
 
 use App\Models\Produk;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage; // Wajib import ini buat hapus gambar
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ProdukController extends Controller
 {
@@ -52,7 +53,7 @@ class ProdukController extends Controller
         }
 
         Produk::create([
-            'id_admin'    => 1, 
+            'id_user'    => Auth::id(), 
             'nama_produk' => $request->nama_produk,
             'sku'         => $request->sku,
             'kategori'    => $request->kategori,

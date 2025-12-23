@@ -16,7 +16,11 @@ return new class extends Migration
             $table->foreignId('id_penerimaan');
             $table->foreign('id_penerimaan')->references('id_penerimaan')->on('penerimaan_barang')->onDelete('cascade');
             $table->foreignId(column: 'id_produk');
+<<<<<<< HEAD
             $table->foreign('id_produk')->references('id_produk')->on('produks')->onDelete('cascade');
+=======
+            $table->foreign('id_produk')->references('id_produk')->on('products')->onDelete('cascade');
+>>>>>>> 84189c8 (Update model dan blade penerimaan)
             $table->string('sku');
             $table->integer('jumlah_surat_jalan');
             $table->integer('jumlah_diterima');

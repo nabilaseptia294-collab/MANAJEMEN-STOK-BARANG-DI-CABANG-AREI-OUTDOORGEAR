@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD:resources/views/layouts/app.blade.php
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -198,5 +199,14 @@
     });
 </script>
 
+=======
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>@yield('title', 'App')</title>
+</head>
+<body>
+    @yield('content')
+>>>>>>> 84189c8 (Update model dan blade penerimaan):resources/views/Layouts/app.blade.php
 </body>
 </html>

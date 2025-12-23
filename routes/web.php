@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\PermintaanStokController;
 use App\Http\Controllers\ReturController;
+use App\Http\Controllers\PenerimaanController;
 
 // Route login
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -59,6 +60,23 @@ Route::prefix('permintaan')->middleware('auth')->group(function () {
 // Permintaan Stok (hanya bisa diakses user login)
 Route::resource('permintaan', PermintaanStokController::class)
     ->middleware('auth');
+Route::middleware('auth')->group(function () {
+    // Halaman penerimaan
+    Route::get('/penerimaan', [PenerimaanController::class, 'index']);
+    Route::get('/penerimaan/tambah', [PenerimaanController::class, 'create']);
+    Route::get('/penerimaan/detail/{id}', [PenerimaanController::class, 'detail']);
+    Route::get('/penerimaan/edit/{id}', [PenerimaanController::class, 'edit']);
+
+    // API penerimaan
+    Route::post('/penerimaan/draft', [PenerimaanController::class, 'storeDraft']);
+    Route::post('/penerimaan/{id}/detail', [PenerimaanController::class, 'addDetail']);
+    Route::put('/penerimaan/{id}', [PenerimaanController::class, 'update']);
+    Route::put('/penerimaan/detail/{id}', [PenerimaanController::class, 'updateDetail']);
+    Route::delete('/penerimaan/{id}', [PenerimaanController::class, 'destroy']);
+    Route::delete('/penerimaan/detail/{id}', [PenerimaanController::class, 'deleteDetail']);
+    Route::post('/penerimaan/{id}/finalize', [PenerimaanController::class, 'finalize']);
+    Route::get('/penerimaan/{id}', [PenerimaanController::class, 'show']);
+});
 
 // Stok
 Route::get('/stok', [StokController::class, 'index'])->name('stok.index');
