@@ -44,7 +44,14 @@ Route::resource('produk', ProdukController::class)
 Route::resource('permintaan-stok', PermintaanStokController::class)->middleware('auth');
 
 // Resource route untuk retur (pakai auth)
-Route::resource('retur', ReturController::class)->middleware('auth');
+Route::prefix('retur')->middleware('auth')->group(function () {
+    Route::get('/retur', [ReturController::class, 'index'])->name('retur.index');
+    Route::get('/retur/create', [ReturController::class, 'create'])->name('retur.create');
+    Route::post('/retur', [ReturController::class, 'store'])->name('retur.store');
+    Route::get('/retur/{id}/edit', [ReturController::class, 'edit'])->name('retur.edit');
+    Route::put('/retur/{id}', [ReturController::class, 'update'])->name('retur.update');
+    Route::delete('/retur/{id}', [ReturController::class, 'destroy'])->name('retur.destroy');
+    });
 
 // Optional: route manual untuk permintaan stok (pakai auth)
 Route::prefix('permintaan')->middleware('auth')->group(function () {
