@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->id();
             
             // Foreign key ke permintaan_stok
-            $table->foreignId('id_permintaan_stok')
+            $table->foreignId('id')
                   ->constrained('permintaan_stok', 'id_permintaan_stok')
                   ->onDelete('cascade');
             

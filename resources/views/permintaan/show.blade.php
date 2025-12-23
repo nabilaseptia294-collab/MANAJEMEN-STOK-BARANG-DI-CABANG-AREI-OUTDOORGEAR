@@ -9,7 +9,7 @@
         <table class="table table-borderless">
             <tr>
                 <th width="200">ID Permintaan</th>
-                <td>PMT-{{ $permintaan->id_permintaan_stok }}</td>
+                <td>PMT-{{ $permintaan->id}}</td>
             </tr>
             <tr>
                 <th>Cabang</th>
@@ -61,7 +61,7 @@
                 @forelse($permintaan->details as $i => $d)
                 <tr>
                     <td>{{ $i + 1 }}</td>
-                    <td>{{ $d->produk->nama_produk ?? '-' }}</td>
+                    <td>{{ $d->produk->nama_produk ??'Produk tidak ditemukan'}}</td>
                     <td>{{ $d->qty }}</td>
                 </tr>
                 @empty
@@ -82,8 +82,7 @@
     </a>
 
     @if($permintaan->status === 'pending')
-        <a href="{{ route('permintaan.edit', $permintaan->id_permintaan_stok) }}"
-           class="btn btn-warning">
+    <a href="{{ route('permintaan.edit', $permintaan) }}" class="btn btn-warning">        
             Edit Permintaan
         </a>
     @endif
