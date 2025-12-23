@@ -8,17 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /**
-     * Tampilkan form login
-     */
+    
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    /**
-     * Proses login
-     */
     public function login(Request $request)
     {
         // Validasi input
@@ -29,7 +24,7 @@ class LoginController extends Controller
 
         // Cek credentials
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate(); // untuk keamanan
+            $request->session()->regenerate(); 
             return redirect()->intended('/dashboard');
         }
 
@@ -39,9 +34,6 @@ class LoginController extends Controller
         ])->withInput();
     }
 
-    /**
-     * Logout user
-     */
     public function logout(Request $request)
     {
         Auth::logout();

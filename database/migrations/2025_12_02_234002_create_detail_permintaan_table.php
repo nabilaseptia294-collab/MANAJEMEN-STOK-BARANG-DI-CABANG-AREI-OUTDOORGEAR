@@ -8,26 +8,22 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('detail_retur', function (Blueprint $table) {
+        Schema::create('detail_permintaan', function (Blueprint $table) {
             $table->id();
-
-            $table->unsignedBigInteger('id_retur');
+            $table->unsignedBigInteger('id_permintaan');
             $table->unsignedBigInteger('id_produk');
-
-            $table->integer('jumlah');
-            $table->string('keterangan')->nullable();
-
+            $table->integer('qty');
             $table->timestamps();
 
-            // FK ke RETUR (id_retur)
-            $table->foreign('id_retur')
-                  ->references('id_retur')
-                  ->on('retur')
+            // FK ke permintaan_stok (id)
+            $table->foreign('id_permintaan')
+                  ->references('id')
+                  ->on('permintaan_stok')
                   ->onDelete('cascade');
 
-            // FK ke PRODUK
+            // FK ke produks (id_produk)
             $table->foreign('id_produk')
-                  ->references('id_produk')
+                  ->references('id_produk') // ⬅️ INI KUNCINYA
                   ->on('produks')
                   ->onDelete('cascade');
         });
@@ -35,6 +31,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('detail_retur');
+        Schema::dropIfExists('detail_permintaan');
     }
 };

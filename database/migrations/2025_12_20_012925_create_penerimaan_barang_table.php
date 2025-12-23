@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('id_admin'); 
             $table->foreign('id_admin')->references('id_admin')->on('admin')->onDelete('cascade');
             $table->foreignId('id_produk');
-            $table->foreign('id_produk')->references('id_produk')->on('products')->onDelete('cascade');
+            $table->foreign('id_produk')->references('id_produk')->on('produks')->onDelete('cascade');
             $table->date('tanggal_terima');
             $table->string('catatan');
             $table->string('status');

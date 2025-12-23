@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/PermintaanStokController.php
 
 namespace App\Http\Controllers;
 
@@ -8,137 +7,130 @@ use App\Models\PermintaanStok;
 use App\Models\DetailPermintaan;
 use App\Models\Produk;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PermintaanStokController extends Controller
 {
-    /**
-     * READ - Daftar permintaan
-     */
+    
     public function index()
     {
+        // Ambil semua permintaan beserta admin dan detail produknya (urut dari terbaru)
         $permintaans = PermintaanStok::with('admin', 'details.produk')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'desc') 
             ->get();
 
+        // Kirim ke view index
         return view('permintaan.index', compact('permintaans'));
     }
 
-    /**
-     * CREATE - Form tambah permintaan
-     */
+    // Tampilkan form tambah permintaan baru
     public function create()
     {
-        $daftar_cabang = [
-            'Cabang Purwokerto',
-            'Cabang Jakarta',
-            'Cabang Bandung',
-            'Cabang Surabaya'
-        ];
-
+        
+        $daftar_cabang = ['Cabang Purwokerto', 'Cabang Jakarta', 'Cabang Bandung', 'Cabang Surabaya'];
+        // Ambil semua produk
         $produks = Produk::all();
 
+        // Kirim ke view create
         return view('permintaan.create', compact('daftar_cabang', 'produks'));
     }
 
-    /**
-     * STORE - Simpan permintaan
-     */
+    // Simpan permintaan baru
     public function store(Request $request)
     {
+        // Validasi input
         $request->validate([
-            'cabang'             => 'required|string|max:100',
+            'cabang' => 'required|string|max:100',
             'tanggal_permintaan' => 'required|date',
-            'alasan'             => 'nullable|string',
-            'produk.*'           => 'required|exists:produk,id_produk',
-            'qty.*'              => 'required|integer|min:1'
+            'alasan' => 'nullable|string',
+            'produk' => 'required|array|min:1',
+            'produk.*' => 'required|exists:produk,id_produk',
+            'qty' => 'required|array|min:1',
+            'qty.*' => 'required|integer|min:1'
         ]);
 
-        // 1. Simpan header permintaan
-        $permintaan = PermintaanStok::create([
-            'id_admin'           => Auth::id(), // pakai user login
-            'cabang'             => $request->cabang,
-            'tanggal_permintaan' => $request->tanggal_permintaan,
-            'status'             => 'pending',
-            'alasan'             => $request->alasan,
-        ]);
-
-        // 2. Simpan detail barang
-        foreach ($request->produk as $i => $produkId) {
-            DetailPermintaan::create([
-                'id_permintaan_stok' => $permintaan->id_permintaan_stok,
-                'id_produk'          => $produkId,
-                'qty'                => $request->qty[$i]
+        
+        DB::transaction(function () use ($request, &$permintaan) {
+            // Simpan permintaan utama
+            $permintaan = PermintaanStok::create([
+                'id_admin' => Auth::id(), // user yang login
+                'cabang' => $request->cabang,
+                'tanggal_permintaan' => $request->tanggal_permintaan,
+                'status' => 'pending', // default pending
+                'alasan' => $request->alasan
             ]);
-        }
 
-        return redirect()
-            ->route('permintaan.show', $permintaan->id_permintaan_stok)
+            // Simpan detail produk
+            if (is_array($request->produk) && is_array($request->qty)) {
+                foreach ($request->produk as $i => $produkId) {
+                    DetailPermintaan::create([
+                        'id_permintaan_stok' => $permintaan->id, 
+                        'id_produk' => $produkId,
+                        'qty' => $request->qty[$i] ?? 1
+                    ]);
+                }
+            }
+        });
+
+        // Redirect ke detail permintaan
+        return redirect()->route('permintaan.show', $permintaan)
             ->with('success', 'Permintaan stok berhasil diajukan');
     }
 
-    /**
-     * READ - Detail permintaan
-     */
+    // Menampilkan detail
     public function show(PermintaanStok $permintaan)
     {
+        
         $permintaan->load('admin', 'details.produk');
-
         return view('permintaan.show', compact('permintaan'));
     }
 
-    /**
-     * EDIT - hanya jika status pending
-     */
+    // menampilkan form edit permintaan
     public function edit(PermintaanStok $permintaan)
     {
-        if ($permintaan->status !== 'pending') {
-            abort(403, 'Permintaan tidak bisa diedit');
-        }
+        // Hanya bisa edit jika status pending
+        if ($permintaan->status !== 'pending') abort(403, 'Permintaan tidak bisa diedit');
 
         $produks = Produk::all();
-
-        return view('permintaan.edit', compact('permintaan', 'produks'));
+        $daftar_cabang = ['Cabang Purwokerto', 'Cabang Jakarta', 'Cabang Bandung', 'Cabang Surabaya'];
+        return view('permintaan.edit', compact('permintaan', 'produks', 'daftar_cabang'));
     }
 
-    /**
-     * UPDATE - hanya jika status pending
-     */
+    // Update permintaan
     public function update(Request $request, PermintaanStok $permintaan)
     {
-        if ($permintaan->status !== 'pending') {
-            abort(403);
-        }
+        // Hanya pending yang bisa update
+        if ($permintaan->status !== 'pending') abort(403, 'Permintaan tidak bisa diperbarui');
 
+        // Validasi input
         $request->validate([
             'cabang' => 'required|string|max:100',
             'alasan' => 'nullable|string'
         ]);
 
+        // Update permintaan
         $permintaan->update([
             'cabang' => $request->cabang,
-            'alasan' => $request->alasan,
+            'alasan' => $request->alasan
         ]);
 
-        return redirect()
-            ->route('permintaan.show', $permintaan->id_permintaan_stok)
+        return redirect()->route('permintaan.show', $permintaan)
             ->with('success', 'Permintaan berhasil diperbarui');
     }
 
-    /**
-     * DELETE - hanya jika status pending
-     */
+    
     public function destroy(PermintaanStok $permintaan)
     {
-        if ($permintaan->status !== 'pending') {
-            abort(403, 'Permintaan tidak bisa dihapus');
-        }
+        // Hanya pending yang bisa dihapus
+        if ($permintaan->status !== 'pending') abort(403, 'Permintaan tidak bisa dihapus');
 
-        // hapus detail dulu
-        $permintaan->details()->delete();
-        $permintaan->delete();
+        // Transaction untuk konsistensi
+        DB::transaction(function () use ($permintaan) {
+            $permintaan->details()->delete(); // hapus detail dulu
+            $permintaan->delete(); // hapus permintaan utama
+        });
 
-        return redirect()
-            ->route('permintaan.index')
+        return redirect()->route('permintaan.index')
             ->with('success', 'Permintaan berhasil dihapus');
     }
 }
