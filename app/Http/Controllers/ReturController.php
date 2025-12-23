@@ -22,17 +22,14 @@ class ReturController extends Controller
     {
         $request->validate([
             'nama_barang'   => 'nullable',
-            'jumlah_retur'  => 'required',
+            'jumlah_retur'  => 'required|numeric',
             'satuan'        => 'nullable',
-            'tanggal_retur' => 'required',
+            'tanggal_retur' => 'required|date',
             'alasan_retur'  => 'required'
         ]);
 
-        // Ambil ID terakhir berdasarkan id_retur
         $last = Retur::orderBy('id_retur', 'desc')->first();
         $next = $last ? $last->id_retur + 1 : 1;
-
-        // Generate kode retur
         $kode = 'RTR-' . date('Ymd') . '-' . str_pad($next, 3, '0', STR_PAD_LEFT);
 
         Retur::create([
@@ -45,7 +42,36 @@ class ReturController extends Controller
             'alasan_retur'  => $request->alasan_retur,
         ]);
 
-        return redirect()->route('retur.index')
-            ->with('success', 'Data retur berhasil ditambahkan!');
+        return redirect()->route('retur.index')->with('success', 'Data retur berhasil ditambahkan!');
+    }
+
+    public function edit($id) {
+    $retur = Retur::findOrFail($id);
+    return view('retur.edit', compact('retur'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'alasan_retur' => 'required',
+            'jumlah_retur' => 'required|numeric',
+        ]);
+
+        $retur = Retur::findOrFail($id);
+        $retur->update([
+            'alasan_retur' => $request->alasan_retur,
+            'jumlah_retur' => $request->jumlah_retur,
+        ]);
+
+        return redirect()->route('retur.index')->with('success', 'Data retur berhasil diperbarui');
+    }
+
+    // INI FUNGSI YANG HILANG/ERROR TADI
+    public function destroy($id)
+    {
+        $retur = Retur::findOrFail($id);
+        $retur->delete();
+
+        return redirect()->route('retur.index')->with('success', 'Data retur berhasil dihapus');
     }
 }
